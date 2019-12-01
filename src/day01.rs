@@ -6,11 +6,11 @@ mod part01 {
     // Fuel required to launch a given module is based on its mass. Specifically,
     // to find the fuel required for a module, take its mass, divide by three,
     // round down, and subtract 2.
-    pub fn calculate_fuel(mass: f32) -> f32 {
-        (mass / 3.0).floor() - 2.0
+    pub fn calculate_fuel(mass: i32) -> i32 {
+        (mass / 3) - 2
     }
 
-    pub fn solve(input: &[f32]) -> f32 {
+    pub fn solve(input: &[i32]) -> i32 {
         input.iter().cloned().map(calculate_fuel).sum()
     }
 }
@@ -27,23 +27,23 @@ mod part02 {
     // Then, treat the fuel amount you just calculated as the input mass and
     // repeat the process, continuing until a fuel requirement is zero or
     // negative.
-    pub fn calculate_fuel(module_mass: f32) -> f32 {
-        let mut total_mass = 0.0;
+    pub fn calculate_fuel(module_mass: i32) -> i32 {
+        let mut total_mass = 0;
         let mut fuel_mass = super::part01::calculate_fuel(module_mass);
-        while fuel_mass > 0.0 {
+        while fuel_mass > 0 {
             total_mass += fuel_mass;
             fuel_mass = super::part01::calculate_fuel(fuel_mass);
         }
         total_mass
     }
 
-    pub fn solve(input: &[f32]) -> f32 {
+    pub fn solve(input: &[i32]) -> i32 {
         input.iter().cloned().map(calculate_fuel).sum()
     }
 }
 
 fn get_input<T: std::str::FromStr>() -> Result<Vec<T>, Box<dyn Error>> {
-    let f = File::open("../inputs/day01.txt")?;
+    let f = File::open("inputs/day01.txt")?;
     let reader = BufReader::new(f);
     let fuel: Vec<T> = reader
         .lines()
@@ -69,12 +69,7 @@ mod test {
 
     #[test]
     fn test_fuel1() {
-        let cases: &[(f32, f32)] = &[
-            (12.0, 2.0),
-            (14.0, 2.0),
-            (1969.0, 654.0),
-            (100756.0, 33583.0),
-        ];
+        let cases: &[(i32, i32)] = &[(12, 2), (14, 2), (1969, 654), (100756, 33583)];
         for (mass, fuel) in cases {
             assert_eq!(part01::calculate_fuel(*mass), *fuel);
         }
@@ -82,7 +77,7 @@ mod test {
 
     #[test]
     fn test_fuel2() {
-        let cases: &[(f32, f32)] = &[(14.0, 2.0), (1969.0, 966.0), (100756.0, 50346.0)];
+        let cases: &[(i32, i32)] = &[(14, 2), (1969, 966), (100756, 50346)];
         for (mass, fuel) in cases {
             assert_eq!(part02::calculate_fuel(*mass), *fuel);
         }
