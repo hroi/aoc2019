@@ -42,19 +42,23 @@ mod part02 {
     }
 }
 
-fn get_input<T: std::str::FromStr>() -> Result<Vec<T>, Box<dyn Error>> {
-    let f = File::open("inputs/day01.txt")?;
+fn get_input<T>(filename: &str) -> Result<Vec<T>, Box<dyn Error>>
+where
+    T: std::str::FromStr,
+    <T as std::str::FromStr>::Err: std::error::Error + 'static,
+{
+    let f = File::open(filename)?;
     let reader = BufReader::new(f);
-    let fuel: Vec<T> = reader
-        .lines()
-        .filter_map(|l| l.ok())
-        .filter_map(|s| s.parse().ok())
-        .collect();
-    Ok(fuel)
+    let mut ret = Vec::new();
+    for line in reader.lines().into_iter() {
+        let val = line?.parse()?;
+        ret.push(val);
+    }
+    Ok(ret)
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let input = get_input()?;
+    let input = get_input("inputs/day01.txt")?;
     let fuel = part01::solve(&input[..]);
     println!("{}", file!());
     println!("part 1: total fuel required for modules: {}", fuel);
