@@ -27,14 +27,14 @@ mod part02 {
     // Then, treat the fuel amount you just calculated as the input mass and
     // repeat the process, continuing until a fuel requirement is zero or
     // negative.
-    pub fn calculate_fuel(module_mass: i32) -> i32 {
-        let mut total_mass = 0;
-        let mut fuel_mass = super::part01::calculate_fuel(module_mass);
-        while fuel_mass > 0 {
-            total_mass += fuel_mass;
-            fuel_mass = super::part01::calculate_fuel(fuel_mass);
+    pub fn calculate_fuel(mass: i32) -> i32 {
+        let mut total_fuel = 0;
+        let mut fuel = super::part01::calculate_fuel(mass);
+        while fuel > 0 {
+            total_fuel += fuel;
+            fuel = super::part01::calculate_fuel(fuel);
         }
-        total_mass
+        total_fuel
     }
 
     pub fn solve(input: &[i32]) -> i32 {
